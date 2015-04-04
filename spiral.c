@@ -4,7 +4,7 @@
 
 typedef enum direction {UP,DOWN,LEFT,RIGHT,NONE} direction;
 typedef struct matr_t{
-	int num;
+	char *num;
 	direction dir;
 	short ctrl;  
 }Matr;
@@ -16,7 +16,7 @@ void fill_in_matr(Matr *matr,char *app,int row,int col)
 	for(i=0;i <row;i++){
 		for(j=0;j<col;j++){
 			app = strtok(NULL,"; ");
-			matr[j+i*col].num = atoi(app);
+			matr[j+i*col].num = app;
 			matr[j+i*col].dir = NONE;
 			matr[j+i*col].ctrl = 0;
 		}	
@@ -63,17 +63,25 @@ direction change_dir(Matr *matr,int i,int j,int m,int n)
 	}
 	return dir;	
 };
+void print(char *str)
+{
+	int i;
+	for(i=0;i<strlen(str);i++)
+		if(str[i] != '\n')
+			printf("%c",str[i]);
+	printf(" ");
+}
 void print_spiral(Matr *matr,int n,int m)
 {
 	int c=1,i=0,j=0,i1,j1;
-	printf("%d ",matr[j+i*m].num);
+	print(matr[j+i*m].num);
 	matr[j+i*m].dir=RIGHT;
 	matr[j+i*m].ctrl = 1;
 	j++;
 	Matr *current = &matr[j+i*m];
 	direction past = matr[j-1+i*m].dir;
 	while(c < n*m){
-		printf("%d ",current->num);
+		print(current->num);
 		current->ctrl = 1;
 		current->dir = past;
 		i1=i;
@@ -93,8 +101,7 @@ void print_spiral(Matr *matr,int n,int m)
 		}
 		c++;
 	}
-	printf("\n");	
-
+	printf("\n");
 }
 int main(int argc,char **argv){
     FILE *file = fopen(argv[1], "r");
