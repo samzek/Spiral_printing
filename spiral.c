@@ -4,21 +4,21 @@
 
 typedef enum direction {UP,DOWN,LEFT,RIGHT,NONE} direction;
 typedef struct matr_t{
-	char num;
+	int num;
 	direction dir;
 	short ctrl;  
 }Matr;
 
-void fill_in_matr(Matr *matr,char *line,int row,int col)
+void fill_in_matr(Matr *matr,char *app,int row,int col)
 {
 	int i,j;
 	int k=4;
 	for(i=0;i <row;i++){
 		for(j=0;j<col;j++){
-			matr[j+i*col].num = line[k];
+			app = strtok(NULL,"; ");
+			matr[j+i*col].num = atoi(app);
 			matr[j+i*col].dir = NONE;
 			matr[j+i*col].ctrl = 0;
-			k+=2;
 		}	
 	}
 
@@ -66,14 +66,14 @@ direction change_dir(Matr *matr,int i,int j,int m,int n)
 void print_spiral(Matr *matr,int n,int m)
 {
 	int c=1,i=0,j=0,i1,j1;
-	printf("%c ",matr[j+i*m].num);
+	printf("%d ",matr[j+i*m].num);
 	matr[j+i*m].dir=RIGHT;
 	matr[j+i*m].ctrl = 1;
 	j++;
 	Matr *current = &matr[j+i*m];
 	direction past = matr[j-1+i*m].dir;
 	while(c < n*m){
-		printf("%c ",current->num);
+		printf("%d ",current->num);
 		current->ctrl = 1;
 		current->dir = past;
 		i1=i;
@@ -101,12 +101,16 @@ int main(int argc,char **argv){
     char line[1024];
     int n,m,i;
     Matr *matr;
-    int *el;
-    while (fgets(line,1024, file)) {			
-		n=atoi(&line[0]);
-		m=atoi(&line[2]);
+    char *app;
+    int *array;
+    while (fgets(line,1024, file)) {
+		i=0;
+		app = strtok(line,"; ");
+		n=atoi(app);
+		app = strtok(NULL,"; ");
+		m=atoi(app);
 		matr = (Matr *) malloc(n*m*sizeof(Matr));	
-		fill_in_matr(matr,line,n,m);
+		fill_in_matr(matr,app,n,m);
 		print_spiral(matr,n,m);
     }
     return 0;
